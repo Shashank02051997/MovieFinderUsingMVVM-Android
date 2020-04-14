@@ -27,9 +27,9 @@ class CustomAdapterMovies :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         return if (viewType == VIEW_TYPE_ITEM) {
-            val v = LayoutInflater.from(parent.context)
+            val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.list_item_movie, parent, false)
-            return MovieViewHolder(v)
+            MovieViewHolder(view)
         } else {
             val view: View = LayoutInflater.from(parent.context)
                 .inflate(R.layout.list_item_lazy_loading, parent, false)
@@ -60,11 +60,11 @@ class CustomAdapterMovies :
 
     fun setData(newMoviesList: ArrayList<SearchResults.SearchItem?>?) {
         if (newMoviesList != null) {
+            if (moviesList.isNotEmpty())
+                moviesList.removeAt(moviesList.size - 1)
             moviesList = newMoviesList
         } else {
             moviesList.add(newMoviesList)
-            notifyItemInserted(moviesList.size - 1)
-            notifyItemRemoved(moviesList.size)
         }
         notifyDataSetChanged()
     }

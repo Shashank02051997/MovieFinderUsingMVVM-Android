@@ -17,7 +17,6 @@ class HomeViewModel(
 ) : ViewModel() {
 
 
-    private var movieName = ""
     private var pageIndex = 0
     private var totalMovies = 0
     private var movieList = ArrayList<SearchResults.SearchItem?>()
@@ -38,35 +37,45 @@ class HomeViewModel(
 
     init {
         _loadMoreListLiveData.value = false
+        _movieNameLiveData.value = ""
     }
 
-    private fun getMovies() {
+    fun getMovies() {
         if (pageIndex == 1) {
             movieList.clear()
             _moviesLiveData.postValue(State.loading())
+        } else {
+            if (movieList.isNotEmpty() && movieList.last() == null)
+                movieList.removeAt(movieList.size - 1)
         }
         viewModelScope.launch {
             _loadMoreListLiveData.value = false
-            try {
-                movieResponse = repository.getMovies(movieName, AppConstant.API_KEY, pageIndex)
-                if (movieResponse.response == AppConstant.SUCCESS) {
-                    movieList.addAll(movieResponse.search)
-                    totalMovies = movieResponse.totalResults.toInt()
-                    _moviesLiveData.postValue(State.success(movieList))
-                } else
-                    _moviesLiveData.postValue(State.error(movieResponse.error))
-                return@launch
-            } catch (e: ApiException) {
-                _moviesLiveData.postValue(State.error(e.message!!))
-            } catch (e: NoInternetException) {
-                _moviesLiveData.postValue(State.error(e.message!!))
+            if (_movieNameLiveData.value != null && _movieNameLiveData.value!!.isNotEmpty()) {
+                try {
+                    movieResponse = repository.getMovies(
+                        _movieNameLiveData.value!!,
+                        AppConstant.API_KEY,
+                        pageIndex
+                    )
+                    if (movieResponse.response == AppConstant.SUCCESS) {
+                        movieList.addAll(movieResponse.search)
+                        totalMovies = movieResponse.totalResults.toInt()
+                        _moviesLiveData.postValue(State.success(movieList))
+                    } else
+                        _moviesLiveData.postValue(State.error(movieResponse.error))
+                    return@launch
+                } catch (e: ApiException) {
+                    _moviesLiveData.postValue(State.error(e.message!!))
+                } catch (e: NoInternetException) {
+                    _moviesLiveData.postValue(State.error(e.message!!))
+                }
             }
+
         }
     }
 
     fun searchMovie(query: String) {
-        movieName = query
-        _movieNameLiveData.value = movieName
+        _movieNameLiveData.value = query
         pageIndex = 1
         totalMovies = 0
         getMovies()

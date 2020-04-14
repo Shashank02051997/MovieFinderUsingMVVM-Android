@@ -118,7 +118,6 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
             Log.i("Info", "Movie Name = $it")
         })
         viewModel.loadMoreListLiveData.observe(this, Observer {
-            Log.i("Info", "Load More = $it")
             if (it) {
                 customAdapterMovies.setData(null)
                 Handler().postDelayed({
@@ -141,19 +140,6 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
                     dataBind.linearLayoutSearch.hide()
                     dataBind.progressBar.hide()
                     customAdapterMovies.setData(state.data)
-                    /*if (moviesList.isNotEmpty()) {
-                        moviesList.removeAt(moviesList.size - 1)
-                        val scrollPosition: Int = moviesList.size
-                        customAdapterMovies.notifyItemRemoved(scrollPosition)
-                        moviesList.addAll(state.data.search)
-                        customAdapterMovies.notifyDataSetChanged()
-                        isLoading = false
-                    } else {
-                        moviesList.addAll(state.data.search)
-                        customAdapterMovies = CustomAdapterMovies(moviesList)
-                        dataBind.recyclerViewMovies.adapter = customAdapterMovies
-                        totalMovies = state.data.totalResults.toInt()
-                    }*/
                 }
                 is State.Error -> {
                     dataBind.progressBar.hide()
@@ -174,7 +160,7 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
                 }
             } else {
                 if (viewModel.moviesLiveData.value is State.Error || customAdapterMovies.itemCount == 0) {
-                    //viewModel.getMovies()
+                    viewModel.getMovies()
                 }
                 dataBind.textViewNetworkStatus.text = getString(R.string.text_connectivity)
                 dataBind.networkStatusLayout.apply {
