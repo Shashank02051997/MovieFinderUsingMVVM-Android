@@ -4,6 +4,8 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.Menu
 import android.view.View
 import android.widget.SearchView
@@ -13,8 +15,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.shashank.moviefindermvvm.R
-import com.shashank.moviefindermvvm.data.model.SearchResults
 import com.shashank.moviefindermvvm.databinding.ActivityHomeBinding
 import com.shashank.moviefindermvvm.ui.adapter.CustomAdapterMovies
 import com.shashank.moviefindermvvm.ui.moviedetail.MovieDetailScrollingActivity
@@ -45,13 +47,12 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
         initializeObserver()
         handleNetworkChanges()
         setupAPICall()
-        //initScrollListener()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search, menu)
+        searchView = menu.findItem(R.id.search).actionView as SearchView
         searchView.apply {
-            menu.findItem(R.id.search).actionView as SearchView
             queryHint = "Search"
             isSubmitButtonEnabled = true
             onActionViewExpanded()
@@ -66,19 +67,44 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
             layoutManager = LinearLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
             adapter = customAdapterMovies
-            addOnItemTouchListener(RecyclerItemClickListener(
-                applicationContext,
-                object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(view: View, position: Int) {
-                        /*val searchItem = moviesList[position]
-                        val intent =
-                            Intent(applicationContext, MovieDetailScrollingActivity::class.java)
-                        intent.putExtra(AppConstant.INTENT_POSTER, searchItem.poster)
-                        intent.putExtra(AppConstant.INTENT_TITLE, searchItem.title)
-                        startActivity(intent)*/
-                    }
+            addOnItemTouchListener(
+                RecyclerItemClickListener(
+                    applicationContext,
+                    object : RecyclerItemClickListener.OnItemClickListener {
+                        override fun onItemClick(view: View, position: Int) {
+                            if (customAdapterMovies.getData().isNotEmpty()) {
+                                val searchItem = customAdapterMovies.getData()[position]
+                                searchItem?.let {
+                                    val intent =
+                                        Intent(
+                                            applicationContext,
+                                            MovieDetailScrollingActivity::class.java
+                                        )
+                                    intent.putExtra(AppConstant.INTENT_POSTER, it.poster)
+                                    intent.putExtra(AppConstant.INTENT_TITLE, it.title)
+                                    startActivity(intent)
+                                }
 
-                }))
+                            }
+                        }
+
+                    })
+            )
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
+                    val visibleItemCount = layoutManager!!.childCount
+                    val totalItemCount = layoutManager.itemCount
+                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                    viewModel.checkForLoadMoreItems(
+                        visibleItemCount,
+                        totalItemCount,
+                        firstVisibleItemPosition
+                    )
+                }
+
+            })
         }
     }
 
@@ -89,7 +115,16 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
 
     private fun initializeObserver() {
         viewModel.movieNameLiveData.observe(this, Observer {
-            searchView.setQuery(it, false)
+            Log.i("Info", "Movie Name = $it")
+        })
+        viewModel.loadMoreListLiveData.observe(this, Observer {
+            Log.i("Info", "Load More = $it")
+            if (it) {
+                customAdapterMovies.setData(null)
+                Handler().postDelayed({
+                    viewModel.loadMore()
+                }, 2000)
+            }
         })
     }
 
@@ -105,7 +140,7 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
                     dataBind.recyclerViewMovies.show()
                     dataBind.linearLayoutSearch.hide()
                     dataBind.progressBar.hide()
-                    customAdapterMovies.setData(state.data.search)
+                    customAdapterMovies.setData(state.data)
                     /*if (moviesList.isNotEmpty()) {
                         moviesList.removeAt(moviesList.size - 1)
                         val scrollPosition: Int = moviesList.size
@@ -138,9 +173,9 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
                     setBackgroundColor(getColorRes(R.color.colorStatusNotConnected))
                 }
             } else {
-                /*if (viewModel.moviesLiveData.value is State.Error || customAdapterMovies.itemCount == 0) {
-                    viewModel.getMovies(searchView.query.toString(), 0)
-                }*/
+                if (viewModel.moviesLiveData.value is State.Error || customAdapterMovies.itemCount == 0) {
+                    //viewModel.getMovies()
+                }
                 dataBind.textViewNetworkStatus.text = getString(R.string.text_connectivity)
                 dataBind.networkStatusLayout.apply {
                     setBackgroundColor(getColorRes(R.color.colorStatusConnected))
@@ -175,25 +210,5 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
         })
     }
 
-    /*private fun initScrollListener() {
-        dataBind.recyclerViewMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager?
-                val visibleItemCount = layoutManager!!.childCount
-                val totalItemCount = layoutManager.itemCount
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-                if (!isLoading && (totalItemCount < totalMovies)) {
-                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
-                        isLoading = true
-                        loadMore()
-                    }
-                }
-            }
-
-        })
-    }*/
 
 }

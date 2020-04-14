@@ -14,7 +14,7 @@ data class SearchResults(
     var totalResults: String,
 
     @SerializedName("Search")
-    var search: ArrayList<SearchItem>
+    var search: ArrayList<SearchItem?>
 
 ) {
     data class SearchItem(

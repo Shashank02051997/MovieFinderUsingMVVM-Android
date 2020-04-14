@@ -18,33 +18,42 @@ class HomeViewModel(
 
 
     private var movieName = ""
-    private var isLoading = false
     private var pageIndex = 0
     private var totalMovies = 0
+    private var movieList = ArrayList<SearchResults.SearchItem?>()
 
-    private val _moviesLiveData = MutableLiveData<State<SearchResults>>()
-    val moviesLiveData: LiveData<State<SearchResults>>
+    private val _moviesLiveData = MutableLiveData<State<ArrayList<SearchResults.SearchItem?>>>()
+    val moviesLiveData: LiveData<State<ArrayList<SearchResults.SearchItem?>>>
         get() = _moviesLiveData
 
     private val _movieNameLiveData = MutableLiveData<String>()
     val movieNameLiveData: LiveData<String>
         get() = _movieNameLiveData
 
-    private val _pageIndexLiveData = MutableLiveData<Int>()
-    val pageIndexLiveData: LiveData<Int>
-        get() = _pageIndexLiveData
+    private val _loadMoreListLiveData = MutableLiveData<Boolean>()
+    val loadMoreListLiveData: LiveData<Boolean>
+        get() = _loadMoreListLiveData
 
     private lateinit var movieResponse: SearchResults
 
-    fun getMovies() {
-        if (pageIndex == 1)
+    init {
+        _loadMoreListLiveData.value = false
+    }
+
+    private fun getMovies() {
+        if (pageIndex == 1) {
+            movieList.clear()
             _moviesLiveData.postValue(State.loading())
+        }
         viewModelScope.launch {
+            _loadMoreListLiveData.value = false
             try {
                 movieResponse = repository.getMovies(movieName, AppConstant.API_KEY, pageIndex)
-                if (movieResponse.response == AppConstant.SUCCESS)
-                    _moviesLiveData.postValue(State.success(movieResponse))
-                else
+                if (movieResponse.response == AppConstant.SUCCESS) {
+                    movieList.addAll(movieResponse.search)
+                    totalMovies = movieResponse.totalResults.toInt()
+                    _moviesLiveData.postValue(State.success(movieList))
+                } else
                     _moviesLiveData.postValue(State.error(movieResponse.error))
                 return@launch
             } catch (e: ApiException) {
@@ -57,9 +66,28 @@ class HomeViewModel(
 
     fun searchMovie(query: String) {
         movieName = query
+        _movieNameLiveData.value = movieName
         pageIndex = 1
+        totalMovies = 0
         getMovies()
     }
 
+    fun loadMore() {
+        pageIndex++
+        getMovies()
+    }
 
+    fun checkForLoadMoreItems(
+        visibleItemCount: Int,
+        totalItemCount: Int,
+        firstVisibleItemPosition: Int
+    ) {
+        if (!_loadMoreListLiveData.value!! && (totalItemCount < totalMovies)) {
+            if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
+                _loadMoreListLiveData.value = true
+            }
+        }
+
+
+    }
 }

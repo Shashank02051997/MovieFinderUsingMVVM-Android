@@ -22,7 +22,7 @@ class CustomAdapterMovies :
         private const val VIEW_TYPE_LOADING = 1
     }
 
-    private var moviesList = ArrayList<SearchResults.SearchItem>()
+    private var moviesList = ArrayList<SearchResults.SearchItem?>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -58,11 +58,18 @@ class CustomAdapterMovies :
         return if (moviesList[position] == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
     }
 
-    fun setData(newMoviesList: ArrayList<SearchResults.SearchItem>) {
-        moviesList.clear()
-        moviesList.addAll(newMoviesList)
+    fun setData(newMoviesList: ArrayList<SearchResults.SearchItem?>?) {
+        if (newMoviesList != null) {
+            moviesList = newMoviesList
+        } else {
+            moviesList.add(newMoviesList)
+            notifyItemInserted(moviesList.size - 1)
+            notifyItemRemoved(moviesList.size)
+        }
         notifyDataSetChanged()
     }
+
+    fun getData() = moviesList
 
     class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
