@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/Support-Recommed%2FEndorse%20me%20on%20Linkedin-yellow?style=for-the-badge&logo=linkedin" alt="Recommend me on LinkedIn" /></a>
 
 
-**Movie Finder** is a sample android application 📱to search movies using OMDb API which is built to demonstrate use of *Modern Android development* tools. Dedicated to all Android Developers with ❤️. 
+**Movie Finder** is a sample android application 📱to search movies using OMDb API which is built to demonstrate use of *Modern Android development* tools. It has been built using kotlin with clean architecture principles and MVVM pattern as well as Architecture Components. Dedicated to all Android Developers with ❤️. 
 
 
 ## About
