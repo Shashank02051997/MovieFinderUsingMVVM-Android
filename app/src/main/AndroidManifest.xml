@@ -20,7 +20,8 @@
             android:name=".ui.moviedetail.MovieDetailScrollingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.home.HomeActivity">
+            android:name=".ui.home.HomeActivity"
+            android:label="Movies">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
