@@ -42,8 +42,8 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dataBind = DataBindingUtil.setContentView(this, R.layout.activity_home)
-        setupUI()
         setupViewModel()
+        setupUI()
         initializeObserver()
         handleNetworkChanges()
         setupAPICall()
