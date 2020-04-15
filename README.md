@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/Support-Recommed%2FEndorse%20me%20on%20Linkedin-yellow?style=for-the-badge&logo=linkedin" alt="Recommend me on LinkedIn" /></a>
 
 
-**Movie Finder** is a sample android application 📱to search movies using OMDb Api built to demonstrate use of *Modern Android development* tools. Dedicated to all Android Developers with ❤️. 
+**Movie Finder** is a sample android application 📱to search movies using OMDb API which is built to demonstrate use of *Modern Android development* tools. Dedicated to all Android Developers with ❤️. 
 
 
 ## About
@@ -44,6 +44,7 @@ The app in itself is a simple movie searching app. Clicking the movie list item 
 - [Retrofit](https://square.github.io/retrofit/) - A type-safe HTTP client for Android and Java.
 - [GSON](https://github.com/google/gson) - A Java serialization/deserialization library to convert Java Objects into JSON and back.
 - [GSON Converter](https://github.com/square/retrofit/tree/master/retrofit-converters/gson) - A Converter which uses Gson for serialization to and from JSON.
+- [OkHttp3](https://github.com/square/okhttp) -  For implementing interceptor, logging and mocking web server.
 - [Glide](https://github.com/bumptech/glide) - An image loading and caching library for Android focused on smooth scrolling.
 - [Material Components for Android](https://github.com/material-components/material-components-android) - Modular and customizable Material Design UI components for Android.
 
