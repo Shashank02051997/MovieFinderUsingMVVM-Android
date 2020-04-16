@@ -49,7 +49,6 @@ class HomeViewModel(
                 movieList.removeAt(movieList.size - 1)
         }
         viewModelScope.launch {
-            _loadMoreListLiveData.value = false
             if (_movieNameLiveData.value != null && _movieNameLiveData.value!!.isNotEmpty()) {
                 try {
                     movieResponse = repository.getMovies(
@@ -61,13 +60,16 @@ class HomeViewModel(
                         movieList.addAll(movieResponse.search)
                         totalMovies = movieResponse.totalResults.toInt()
                         _moviesLiveData.postValue(State.success(movieList))
+                        _loadMoreListLiveData.value = false
                     } else
                         _moviesLiveData.postValue(State.error(movieResponse.error))
                     return@launch
                 } catch (e: ApiException) {
                     _moviesLiveData.postValue(State.error(e.message!!))
+                    _loadMoreListLiveData.value = false
                 } catch (e: NoInternetException) {
                     _moviesLiveData.postValue(State.error(e.message!!))
+                    _loadMoreListLiveData.value = false
                 }
             }
 

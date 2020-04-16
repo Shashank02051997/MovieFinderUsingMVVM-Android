@@ -62,7 +62,8 @@ class CustomAdapterMovies :
         if (newMoviesList != null) {
             if (moviesList.isNotEmpty())
                 moviesList.removeAt(moviesList.size - 1)
-            moviesList = newMoviesList
+            moviesList.clear()
+            moviesList.addAll(newMoviesList)
         } else {
             moviesList.add(newMoviesList)
         }
