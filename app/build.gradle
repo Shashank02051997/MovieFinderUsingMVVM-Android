@@ -54,7 +54,7 @@ dependencies {
     implementation "org.kodein.di:kodein-di-generic-jvm:6.2.1"
     implementation "org.kodein.di:kodein-di-framework-android-x:6.2.1"
     // Arch Components
-    def arch_components = '2.3.0-alpha03'
+    def arch_components = '2.3.0-alpha04'
     //Navigation
     implementation "androidx.navigation:navigation-runtime-ktx:$arch_components"
     implementation "androidx.navigation:navigation-fragment-ktx:$arch_components"
@@ -71,7 +71,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     //Material design
-    implementation "com.google.android.material:material:1.2.0-alpha05"
+    implementation "com.google.android.material:material:1.2.0-alpha06"
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
