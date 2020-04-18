@@ -1,8 +1,7 @@
-package com.shashank.platform.moviefinder
+package com.shashank.moviefindermvvm.data.network
 
 import com.shashank.moviefindermvvm.data.model.MovieDetail
 import com.shashank.moviefindermvvm.data.model.SearchResults
-import com.shashank.moviefindermvvm.data.network.NetworkConnectionInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response

@@ -1,8 +1,8 @@
 package com.shashank.moviefindermvvm.data.repositories
 
 import com.shashank.moviefindermvvm.data.model.MovieDetail
+import com.shashank.moviefindermvvm.data.network.ApiInterface
 import com.shashank.moviefindermvvm.data.network.SafeApiRequest
-import com.shashank.platform.moviefinder.ApiInterface
 
 class MovieDetailRepository(
     private val api: ApiInterface

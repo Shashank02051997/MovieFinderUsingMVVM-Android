@@ -1,12 +1,12 @@
 package com.shashank.moviefindermvvm
 
 import android.app.Application
+import com.shashank.moviefindermvvm.data.network.ApiInterface
 import com.shashank.moviefindermvvm.data.network.NetworkConnectionInterceptor
 import com.shashank.moviefindermvvm.data.repositories.HomeRepository
 import com.shashank.moviefindermvvm.data.repositories.MovieDetailRepository
 import com.shashank.moviefindermvvm.ui.home.HomeViewModelFactory
 import com.shashank.moviefindermvvm.ui.moviedetail.MovieDetailViewModelFactory
-import com.shashank.platform.moviefinder.ApiInterface
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
