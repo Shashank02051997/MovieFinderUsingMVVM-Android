@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.shashank.moviefindermvvm.R
@@ -61,7 +61,7 @@ class MovieDetailScrollingActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProviders.of(this, factory).get(MovieDetailViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(MovieDetailViewModel::class.java)
     }
 
     @SuppressLint("SetTextI18n")

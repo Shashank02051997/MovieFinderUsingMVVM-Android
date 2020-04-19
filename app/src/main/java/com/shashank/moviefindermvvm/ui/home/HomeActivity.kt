@@ -12,7 +12,7 @@ import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -109,7 +109,7 @@ class HomeActivity : AppCompatActivity(), KodeinAware {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProviders.of(this, factory).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(HomeViewModel::class.java)
 
     }
 
