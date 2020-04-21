@@ -10,7 +10,9 @@ import com.shashank.moviefindermvvm.util.ApiException
 import com.shashank.moviefindermvvm.util.AppConstant
 import com.shashank.moviefindermvvm.util.NoInternetException
 import com.shashank.moviefindermvvm.util.State
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MovieDetailViewModel(
     private val repository: MovieDetailRepository
@@ -23,15 +25,20 @@ class MovieDetailViewModel(
 
     fun getMovieDetail(movieTitle: String) {
         _movieDetailLiveData.postValue(State.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 movieDetailResponse = repository.getMovieDetail(movieTitle, AppConstant.API_KEY)
-                _movieDetailLiveData.postValue(State.success(movieDetailResponse))
-                return@launch
+                withContext(Dispatchers.Main) {
+                    _movieDetailLiveData.postValue(State.success(movieDetailResponse))
+                }
             } catch (e: ApiException) {
-                _movieDetailLiveData.postValue(State.error(e.message!!))
+                withContext(Dispatchers.Main) {
+                    _movieDetailLiveData.postValue(State.error(e.message!!))
+                }
             } catch (e: NoInternetException) {
-                _movieDetailLiveData.postValue(State.error(e.message!!))
+                withContext(Dispatchers.Main) {
+                    _movieDetailLiveData.postValue(State.error(e.message!!))
+                }
             }
         }
     }

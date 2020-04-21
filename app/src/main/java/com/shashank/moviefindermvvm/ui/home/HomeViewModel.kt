@@ -10,7 +10,9 @@ import com.shashank.moviefindermvvm.util.ApiException
 import com.shashank.moviefindermvvm.util.AppConstant
 import com.shashank.moviefindermvvm.util.NoInternetException
 import com.shashank.moviefindermvvm.util.State
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeViewModel(
     private val repository: HomeRepository
@@ -48,7 +50,7 @@ class HomeViewModel(
             if (movieList.isNotEmpty() && movieList.last() == null)
                 movieList.removeAt(movieList.size - 1)
         }
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             if (_movieNameLiveData.value != null && _movieNameLiveData.value!!.isNotEmpty()) {
                 try {
                     movieResponse = repository.getMovies(
@@ -56,20 +58,25 @@ class HomeViewModel(
                         AppConstant.API_KEY,
                         pageIndex
                     )
-                    if (movieResponse.response == AppConstant.SUCCESS) {
-                        movieList.addAll(movieResponse.search)
-                        totalMovies = movieResponse.totalResults.toInt()
-                        _moviesLiveData.postValue(State.success(movieList))
-                        _loadMoreListLiveData.value = false
-                    } else
-                        _moviesLiveData.postValue(State.error(movieResponse.error))
-                    return@launch
+                    withContext(Dispatchers.Main) {
+                        if (movieResponse.response == AppConstant.SUCCESS) {
+                            movieList.addAll(movieResponse.search)
+                            totalMovies = movieResponse.totalResults.toInt()
+                            _moviesLiveData.postValue(State.success(movieList))
+                            _loadMoreListLiveData.value = false
+                        } else
+                            _moviesLiveData.postValue(State.error(movieResponse.error))
+                    }
                 } catch (e: ApiException) {
-                    _moviesLiveData.postValue(State.error(e.message!!))
-                    _loadMoreListLiveData.value = false
+                    withContext(Dispatchers.Main) {
+                        _moviesLiveData.postValue(State.error(e.message!!))
+                        _loadMoreListLiveData.value = false
+                    }
                 } catch (e: NoInternetException) {
-                    _moviesLiveData.postValue(State.error(e.message!!))
-                    _loadMoreListLiveData.value = false
+                    withContext(Dispatchers.Main) {
+                        _moviesLiveData.postValue(State.error(e.message!!))
+                        _loadMoreListLiveData.value = false
+                    }
                 }
             }
 
