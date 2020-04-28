@@ -16,6 +16,9 @@
 
 **Movie Finder** is a sample android application 📱to search movies 🍿using OMDb API which is built to demonstrate use of *Modern Android development* tools. It has been built using kotlin with clean architecture principles and MVVM pattern as well as Architecture Components. Dedicated to all Android Developers with ❤️. 
 
+***You can Install and test latest app from below 👇***
+
+[![Movie Finder App](https://img.shields.io/badge/MovieFinder🍿-APK-red.svg?style=for-the-badge&logo=android)](https://github.com/Shashank02051997/MovieFinderUsingMVVM-Android/tree/master/apk)
 
 ## About
 The app in itself is a simple movie searching app. Clicking the movie list item it shows the detail of the movie. While this is not an extremely complex app, it isn't a silly Hello World one either, so the hope is that it'll cover regular use cases for a basic application.
