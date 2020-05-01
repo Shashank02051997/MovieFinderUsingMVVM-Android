@@ -6,6 +6,8 @@
 ![GitHub watchers](https://img.shields.io/github/watchers/Shashank02051997/MovieFinderUsingMVVM-Android?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/shashank020597?label=Follow&style=social)
 
+![GitHub pull requests](https://img.shields.io/github/issues-pr/Shashank02051997/MovieFinderUsingMVVM-Android) ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/Shashank02051997/MovieFinderUsingMVVM-Android) ![GitHub last commit](https://img.shields.io/github/last-commit/Shashank02051997/MovieFinderUsingMVVM-Android)  ![GitHub issues](https://img.shields.io/github/issues-raw/Shashank02051997/MovieFinderUsingMVVM-Android) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](Shashank02051997/MovieFinderUsingMVVM-Android)
+
 [![GitHub license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![platform](https://img.shields.io/badge/platform-Android-yellow.svg)](https://www.android.com)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=plastic)](https://android-arsenal.com/api?level=21)
