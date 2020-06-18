@@ -83,7 +83,7 @@ This app uses [***MVVM (Model View View-Model)***](https://developer.android.com
 ## Contributing
 
 Please fork this repository and contribute back using
-[pull requests](https://github.com/Shashank02051997/FancyToast-Android/pulls).
+[pull requests](https://github.com/Shashank02051997/MovieFinderUsingMVVM-Android/pulls).
 
 Any contributions, large or small, major features, bug fixes, are welcomed and appreciated
 but will be thoroughly reviewed .
